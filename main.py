@@ -2,6 +2,8 @@ import time
 import requests
 import selectorlib
 import datetime
+import streamlit
+import plotly.express as px
 
 URL = 'https://programmer100.pythonanywhere.com/'
 HEADERS = {
@@ -32,4 +34,4 @@ if __name__ == '__main__':
         print(temperature)
         with open('temperatures.txt', 'a') as file:
             file.write(f'{now.strftime("%d-%m-%Y %H:%M:%S")}, {temperature}\n')
-        time.sleep(.5)
+        time.sleep(2)
