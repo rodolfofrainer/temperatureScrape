@@ -2,8 +2,7 @@ import time
 import requests
 import selectorlib
 import datetime
-import streamlit
-import plotly.express as px
+import sqlite3
 
 URL = 'https://programmer100.pythonanywhere.com/'
 HEADERS = {
@@ -11,6 +10,8 @@ HEADERS = {
         AppleWebKit/537.36 (KHTML, like Gecko) \
             Chrome/39.0.2171.95 Safari/537.36'
 }
+
+connection = sqlite3.connect('temperatures.db')
 
 
 def scraper(url):
@@ -31,7 +32,9 @@ if __name__ == '__main__':
         now = datetime.datetime.now()
         scraped = scraper(URL)
         temperature = scrape_source(scraped)
-        print(temperature)
-        with open('temperatures.txt', 'a') as file:
-            file.write(f'{now.strftime("%d-%m-%Y %H:%M:%S")}, {temperature}\n')
+        values = [int(temperature), now.strftime("%d-%m-%Y %H:%M:%S")]
+        cursor = connection.cursor()
+        cursor.execute("INSERT INTO temperatures VALUES(?,?)",
+                       values)
+        connection.commit()
         time.sleep(2)
